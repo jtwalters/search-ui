@@ -259,3 +259,6 @@ ValueElementRendererTest();
 
 import {ResultsPerPageTest} from './ui/ResultsPerPageTest';
 ResultsPerPageTest();
+
+import {FacetValuesOrderTest} from './ui/FacetValuesOrderTest';
+FacetValuesOrderTest();
