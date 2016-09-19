@@ -27,17 +27,18 @@ export class Sort extends Component {
    */
   static options: ISortOptions = {
     /**
-     * The criteria for sorting<br/>
-     * The available criteria are:
-     * <ul>
-     *   <li><code>relevancy</code></li>
-     *   <li><code>Date</code></li>
-     *   <li><code>qre</code></li>
-     *   <li><code>@fieldname</code> (replace fieldname with an actual field name (e.g. <code>@syssize</code>)</li>
-     * </ul>
+     * The criterion for sorting
      *
-     * A direction (ascending or descending) can be specified, for example "date ascending"<br/>
-     * A Sort component can have multiple criteria, passed as a list<br/>
+     * The available criteria are:
+     * - `relevancy`
+     * - `Date`
+     * - `qre`
+     * - `@fieldname` (replace fieldname with an actual field name (e.g. <code>@syssize</code>)
+     *
+     * A direction (ascending or descending) can be specified, for example "date ascending".
+     *
+     * A Sort component can have multiple criteria, passed as a list.
+     *
      * This option is required.
      */
     sortCriteria: ComponentOptions.buildCustomListOption((values: string[] | SortCriteria[]) => {
@@ -47,11 +48,12 @@ export class Sort extends Component {
         } else {
           return <SortCriteria>criteria;
         }
-      })
+      });
     }, { required: true }),
     /**
-     * The caption to display on the element<br/>
-     * If not specified, the component will use the tag's body
+     * The caption to display on the element.
+     *
+     * If not specified, the component will use the tag body.
      */
     caption: ComponentOptions.buildLocalizedStringOption({ required: true })
   };
@@ -72,12 +74,11 @@ export class Sort extends Component {
     Assert.isLargerOrEqualsThan(1, this.options.sortCriteria.length);
 
     var eventName = this.queryStateModel.getEventName(Model.eventTypes.changeOne) + QueryStateModel.attributesEnum.sort;
-    this.bind.onRootElement(eventName, (args: IAttributesChangedEventArg) => this.handleQueryStateChanged(args))
-    this.bind.onRootElement(QueryEvents.querySuccess, (args: IQuerySuccessEventArgs) => this.handleQuerySuccess(args))
+    this.bind.onRootElement(eventName, (args: IAttributesChangedEventArg) => this.handleQueryStateChanged(args));
+    this.bind.onRootElement(QueryEvents.querySuccess, (args: IQuerySuccessEventArgs) => this.handleQuerySuccess(args));
     this.bind.onRootElement(QueryEvents.buildingQuery, (args: IBuildingQueryEventArgs) => this.handleBuildingQuery(args));
     this.bind.onRootElement(QueryEvents.queryError, (args: IQueryErrorEventArgs) => this.handleQueryError(args));
     this.bind.on(this.element, 'click', () => this.handleClick());
-
     if (Utils.isNonEmptyString(this.options.caption)) {
       $$(this.element).text(this.options.caption);
     }
@@ -91,8 +92,9 @@ export class Sort extends Component {
 
   /**
    * Select the Sort component.
-   * @param direction The sort direction (e.g. ascending, descending)<br/>
-   * Will trigger a query if the selection made the criteria change (if it was toggled)
+   * @param direction The sort direction (e.g. ascending, descending).
+   *
+   * Will trigger a query if the selection made the criteria change (if it was toggled).
    */
   public select(direction?: string) {
     if (direction) {

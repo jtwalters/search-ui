@@ -229,7 +229,7 @@ export function ComponentOptionsTest() {
               required: true
             })
           };
-          expect(function () { ComponentOptions.initComponentOptions(elem, { options, ID: 'fooID' }) }).toThrowError('fooID.testRequired is required');
+          expect(() => { ComponentOptions.initComponentOptions(elem, { options, ID: 'fooID' }); }).not.toThrow();
         });
         it('which initializes the options of a component with postProcessing', function () {
           let options = {
