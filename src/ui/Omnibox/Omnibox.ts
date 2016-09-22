@@ -384,7 +384,7 @@ export class Omnibox extends Component {
     toClean = _.filter(toClean, (partial: string, pos?: number, array?: string[]) => {
       return pos === 0 || partial !== array[pos - 1];
     });
-
+    
     // Custom dimensions cannot be an array in analytics service: Send a string joined by ; instead.
     // Need to replace ;
     toClean = _.map(toClean, (partial) => {

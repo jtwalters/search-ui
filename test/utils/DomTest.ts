@@ -17,12 +17,13 @@ module Coveo {
       var jqueryOrig = window['jQuery'];
       beforeEach(function () {
         // we want to test the basic event, not jquery one
-        window['jQuery'] = null;
+        window['Coveo']['$'] = null;
       });
 
       afterEach(function () {
-        window['jQuery'] = jqueryOrig;
+        window['Coveo']['$'] = jqueryOrig;
       });
+
 
       it('insert after should work properly', function () {
         var parent = document.createElement('div')
