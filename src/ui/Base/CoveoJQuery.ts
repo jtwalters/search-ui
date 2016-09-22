@@ -6,7 +6,7 @@ interface IWindow {
   $: any;
 }
 
-// This class is essentially only there for legacy reasons : If there is any code in the wild that called this directly,
+export var jQueryInstance: JQueryStatic;
 // we don't want this to break.
 export class CoveoJQuery {
   public static automaticallyCreateComponentsInside(element: HTMLElement, initParameters: IInitializationParameters, ignore?: string[]) {
@@ -18,28 +18,28 @@ export class CoveoJQuery {
   }
 }
 
-export var jQueryInstance: JQuery;
 
-if (jQueryIsDefined()) {
-  initCoveoJQuery();
-} else {
-  // Adding a check in case jQuery was added after the jsSearch
+if (!initCoveoJQuery()) {
   document.addEventListener('DOMContentLoaded', () => {
-    if (jQueryIsDefined()) {
-      initCoveoJQuery();
-    }
+    initCoveoJQuery();
   })
 }
 
 function initCoveoJQuery() {
-  jQueryInstance = window['$'];
+  if (!jQueryIsDefined()) {
+    return false;
+  }
+
+  jQueryInstance = getJQuery();
+
   if (window['Coveo'] == undefined) {
     window['Coveo'] = {};
   }
   if (window['Coveo']['$'] == undefined) {
     window['Coveo']['$'] = jQueryInstance;
   }
-  window['$'].fn.coveo = function (...args: any[]) {
+
+  jQueryInstance.fn.coveo = function (...args: any[]) {
     var returnValue: any;
     this.each((index: number, element: HTMLElement) => {
       var returnValueForThisElement: any;
@@ -56,8 +56,28 @@ function initCoveoJQuery() {
     });
     return returnValue;
   }
+
+  return true;
 }
 
 export function jQueryIsDefined(): boolean {
+  return jQueryDefinedOnWindow() || jQueryDefinedOnCoveoObject();
+}
+
+function jQueryDefinedOnCoveoObject(): boolean {
+  return window['Coveo'] != undefined && window['Coveo']['$'] != undefined;
+}
+
+function jQueryDefinedOnWindow(): boolean {
   return window['$'] != undefined && window['$'].fn != undefined && window['$'].fn.jquery != undefined;
+}
+
+function getJQuery(): JQueryStatic {
+  let jQueryInstance: JQueryStatic;
+  if (window['$']) {
+    jQueryInstance = window['$'];
+  } else {
+    jQueryInstance = window['Coveo']['$'];
+  }
+  return jQueryInstance;
 }
