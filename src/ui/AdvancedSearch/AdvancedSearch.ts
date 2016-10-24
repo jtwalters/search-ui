@@ -11,6 +11,7 @@ import {$$} from '../../utils/Dom';
 import {IAdvancedSearchInput, IAdvancedSearchPrebuiltInput, IAdvancedSearchSection, IExternalAdvancedSearchSection} from './AdvancedSearchInput';
 import {AdvancedSearchInputFactory} from './AdvancedSearchInputFactory';
 import {IQueryOptions} from '../../controllers/QueryController';
+import {IAnalyticsNoMeta, analyticsActionCauseList} from '../Analytics/AnalyticsActionListMeta';
 
 export interface IAdvancedSearchOptions {
   includeKeywords?: boolean;
@@ -63,6 +64,7 @@ export class AdvancedSearch extends Component {
    * Launch the advanced search query.
    */
   public executeAdvancedSearch() {
+    this.usageAnalytics.logSearchEvent<IAnalyticsNoMeta>(analyticsActionCauseList.advancedSearch, {});
     this.queryController.executeQuery();
   }
 
