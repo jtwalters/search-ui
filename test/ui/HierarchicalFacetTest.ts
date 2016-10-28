@@ -125,7 +125,7 @@ export function HierarchicalFacetTest() {
 
     it('should set the correct css class for a value with no child', function () {
       doQuery();
-      expect($$(getFacetValueElement('foo0-0')).hasClass('coveo-no-childs')).toBe(true);
+      expect($$(getFacetValueElement('level:3--value:foo0')).hasClass('coveo-no-childs')).toBe(true);
     });
 
     it('should request 10000 values but displays only as much as requested', function () {
