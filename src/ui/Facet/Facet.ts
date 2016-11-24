@@ -53,6 +53,7 @@ import {KeyboardUtils, KEYBOARD} from '../../utils/KeyboardUtils';
 import {IStringMap} from '../../rest/GenericParam';
 import {FacetValuesOrder} from './FacetValuesOrder';
 import {ValueElement} from './ValueElement';
+import {SearchAlertsEvents, ISearchAlertsPopulateMessageEventArgs} from '../../events/SearchAlertEvents';
 
 export interface IFacetOptions {
   title?: string;
@@ -480,7 +481,9 @@ export class Facet extends Component {
     this.initComponentStateEvents();
     this.initOmniboxEvents();
     this.initBreadCrumbEvents();
+    this.initSearchAlertEvents();
     this.updateNumberOfValues();
+
 
     this.resize = () => {
       if (!this.disabled) {
@@ -896,6 +899,12 @@ export class Facet extends Component {
     }
   }
 
+  protected handlePopulateSearchAlerts(args: ISearchAlertsPopulateMessageEventArgs) {
+    if (this.values.hasSelectedOrExcludedValues()) {
+      args.text.push(new BreadcrumbValueList(this, this.values.getSelected().concat(this.values.getExcluded()), BreadcrumbValueElement).buildAsString());
+    }
+  }
+
   protected initFacetQueryController() {
     this.facetQueryController = new FacetQueryController(this);
   }
@@ -961,6 +970,10 @@ export class Facet extends Component {
       this.bind.onRootElement(BreadcrumbEvents.populateBreadcrumb, (args: IPopulateBreadcrumbEventArgs) => this.handlePopulateBreadcrumb(args));
       this.bind.onRootElement(BreadcrumbEvents.clearBreadcrumb, (args: IClearBreadcrumbEventArgs) => this.handleClearBreadcrumb());
     }
+  }
+
+  protected initSearchAlertEvents() {
+    this.bind.onRootElement(SearchAlertsEvents.searchAlertsPopulateMessage, (args: ISearchAlertsPopulateMessageEventArgs) => this.handlePopulateSearchAlerts(args));
   }
 
   protected handleOmniboxWithStaticValue(eventArg: IPopulateOmniboxEventArgs) {
