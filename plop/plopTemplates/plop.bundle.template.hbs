@@ -14,3 +14,6 @@ export { {{this}} } from '../src/ui/{{this}}/{{this}}.ts';
 
 import {swapVar} from './SwapVar.ts';
 swapVar(this);
+
+import Globalize = require('globalize');
+window['Globalize'] = Globalize;

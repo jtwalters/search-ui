@@ -112,3 +112,6 @@ export {Logo} from './ui/Logo/Logo';
 
 import {swapVar} from './SwapVar';
 swapVar(this);
+
+import Globalize = require('globalize');
+window['Globalize'] = Globalize; 
